@@ -1,45 +1,67 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">"
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <title>ToDo App</title>
 </head>
 <body>
     <div class="container">
         <div class="row">
             <div class="col s12 m6">
-              <div class="card ">
+              <div class="card darken-1">
                 <div class="card-content">
+                  <% if(error !== null){ %>
+                  <div class="row teal lighten-4">
+                    <div class="col s12">
+                      <p class="center-align"><%= error %></p>
+                    </div>
+                  </div>
+                  <% } %>
                   <span class="card-title">ToDo List</span>
                   <div class="row">
                     <form class="col s12" method="post" action="/">
                       <div class="row">
                         <div class="input-field col s6">
                           <input placeholder="Task" id="task" type="text" name="task">
-                          <label for="task">Insert task</label>
-                       </div>
-                      </div>
-                      <input type="submit" value="Add task" class="btn">
-                     </form>
+                          <label for="task">Insert Task</label>
+                        </div>
                     </div>
+                    <input type="submit" value="Add Task" class="btn">
+                </form>
+              </div>
                 </div>
                 <div class="card-action">
-                    <ul class="collection">
-                        <% tasks.forEach(task => { %>
-                        <li class="collection-item">
-                          <%= task.task %>
-                          <a href="delete-task/<%= task.id %>" class="secondary-content"><i class="material-icons">delete</i></a>
-                        </li>
-                        <% }) %>
-                      </ul>
+                  <ul class="collection">
+                    <% tasks.forEach(task => { %>
+                    <li class="collection-item">
+                        <% if (task.id === editTaskId) { %>
+                            <form method="post" action="/edit-task/<%= task.id %>">
+                                <div class="input-field inline">
+                                    <input type="text" name="task" value="<%= task.task %>" required>
+                                </div>
+                                <button type="submit" class="btn-small">Save</button>
+                                <a href="/" class="btn-small grey">Cancel</a>
+                            </form>
+                        <% } else { %>
+                            <%= task.task %>
+                            <a href="delete-task/<%= task.id %>" class="secondary-content">
+                                <i class="material-icons">delete</i>
+                            </a>
+                            <a href="/?editTaskId=<%= task.id %>" class="secondary-content">
+                                <i class="material-icons">create</i>
+                            </a>
+                        <% } %>
+                    </li>
+                    <% }) %>
+                </ul>
+                      <a href="/delete-tasks" class="btn">Clear all</a>
                 </div>
               </div>
             </div>
           </div>
-      </div>
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>
 </html>
